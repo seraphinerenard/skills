@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<!-- CONTRACT skill=make-videos mode=B palette=broadcast-dark scenes=5 -->
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Skylark planning demo</title>
+<style>
+  /* @keep:tokens  Palette: broadcast-dark (values are the authority in SKILL.md) */
+  :root {
+    --bg: #0B0E13;
+    --surface: #151A22;
+    --text: #E9EDF2;
+    --muted: #8B95A5;
+    --accent: #E0483E;
+    --accent2: #E5B84B;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #1D2129;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    padding: 24px;
+  }
+  .stage {
+    width: min(1100px, 96vw);
+    aspect-ratio: 16 / 9;
+    background: var(--bg);
+    position: relative;
+    overflow: hidden;
+    container-type: inline-size;
+  }
+  .scene {
+    position: absolute;
+    inset: 0;
+    padding: 8cqw 9cqw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .kicker {
+    color: var(--muted);
+    font-size: 1.7cqw;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 2.2cqw;
+  }
+  .line {
+    color: var(--text);
+    font-size: 5cqw;
+    font-weight: 700;
+    line-height: 1.12;
+    max-width: 22ch;
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  .line .em { color: var(--accent); }
+  .rule {
+    height: 0.5cqw;
+    width: 14cqw;
+    background: var(--accent);
+    margin-top: 3cqw;
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+
+  /* Product mock */
+  .frame {
+    width: 74cqw;
+    margin: 0 auto;
+    border: 1px solid var(--surface);
+    border-radius: 10px;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(60px) scale(0.96);
+  }
+  .frame .bar {
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    gap: 0.8cqw;
+    padding: 1.1cqw 1.5cqw;
+  }
+  .frame .dot { width: 0.9cqw; height: 0.9cqw; border-radius: 50%; background: var(--muted); opacity: 0.5; }
+  .frame .url { color: var(--muted); font-size: 1.4cqw; font-family: Menlo, Consolas, monospace; margin-left: 1cqw; }
+  .frame .body { background: var(--bg); padding: 2.4cqw; display: grid; grid-template-columns: 1fr 1fr; gap: 2.4cqw; }
+  .chart { display: flex; align-items: flex-end; gap: 1.1cqw; height: 16cqw; }
+  .chart .col { flex: 1; background: var(--surface); transform: scaleY(0); transform-origin: bottom; }
+  .chart .col.hot { background: var(--accent); }
+  .rows { display: flex; flex-direction: column; gap: 1.2cqw; justify-content: flex-end; }
+  .row { background: var(--surface); height: 3cqw; opacity: 0; transform: translateX(24px); }
+  .row.flag { border-left: 0.5cqw solid var(--accent2); }
+
+  /* Proof stats */
+  .stats { display: flex; gap: 9cqw; }
+  .stat .big {
+    color: var(--accent);
+    font-size: 8cqw;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+  .stat .base { color: var(--muted); font-size: 1.9cqw; margin-top: 0.8cqw; max-width: 24ch; }
+  .stat { opacity: 0; transform: translateY(30px); }
+
+  /* CTA */
+  .cta { align-items: center; text-align: center; }
+  .wordmark-clip { overflow: hidden; padding-bottom: 0.5cqw; }
+  .wordmark {
+    color: var(--text);
+    font-size: 9cqw;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    transform: translateY(110%);
+  }
+  .cta .rule { margin: 1.6cqw auto 0; }
+  .cta .action { color: var(--muted); font-size: 2.4cqw; margin-top: 2.4cqw; opacity: 0; }
+  .cta .action code { color: var(--text); font-family: Menlo, Consolas, monospace; }
+
+  .replay {
+    position: absolute;
+    bottom: 4cqw;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--surface);
+    color: var(--text);
+    border: 1px solid var(--muted);
+    font-size: 1.7cqw;
+    padding: 1cqw 2.6cqw;
+    cursor: pointer;
+    opacity: 0;
+    pointer-events: none;
+  }
+  .replay:focus-visible { outline: 2px solid var(--accent2); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+
+  <section class="scene" id="hook">
+    <p class="kicker">Skylark for transit operators</p>
+    <h1 class="line">The 7:40 left riders at the curb. <span class="em">The 8:10 ran empty.</span></h1>
+    <div class="rule"></div>
+  </section>
+
+  <section class="scene" id="problem">
+    <p class="kicker">The planning gap</p>
+    <h2 class="line">Reworking a route plan by hand takes <span class="em">11 days</span> from passenger counts to a new schedule.</h2>
+  </section>
+
+  <section class="scene" id="turn">
+    <div class="frame">
+      <div class="bar">
+        <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        <span class="url">app.skylark.example/routes/14</span>
+      </div>
+      <div class="body">
+        <div class="chart">
+          <div class="col" style="height:35%"></div>
+          <div class="col" style="height:55%"></div>
+          <div class="col hot" style="height:95%"></div>
+          <div class="col" style="height:70%"></div>
+          <div class="col" style="height:45%"></div>
+          <div class="col" style="height:60%"></div>
+          <div class="col hot" style="height:88%"></div>
+          <div class="col" style="height:40%"></div>
+        </div>
+        <div class="rows">
+          <div class="row flag"></div>
+          <div class="row"></div>
+          <div class="row flag"></div>
+          <div class="row"></div>
+          <div class="row"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene" id="proof">
+    <p class="kicker">Metro Kestrel Transit, first quarter on Skylark</p>
+    <div class="stats">
+      <div class="stat">
+        <div class="big" data-count="4" data-suffix=" h">0 h</div>
+        <div class="base">to a revised schedule, down from 11 days</div>
+      </div>
+      <div class="stat">
+        <div class="big" data-count="23" data-suffix="%">0%</div>
+        <div class="base">fewer overloaded departures across 42 routes</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene cta" id="cta">
+    <div class="wordmark-clip"><div class="wordmark">Skylark</div></div>
+    <div class="rule"></div>
+    <p class="action">Book a demo at <code>skylark.example/demo</code></p>
+  </section>
+
+  <button class="replay" id="replay" type="button">Replay</button>
+</div>
+
+<!-- Pinned-version CDN load is the sanctioned mode B exception (rule V6). -->
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script>
+  const tl = gsap.timeline({paused: true, defaults: {ease: 'power3.out'}});
+  const show = (id) => tl.set(id, {opacity: 1, pointerEvents: 'auto'});
+  const hide = (id, pos) => tl.to(id, {opacity: 0, duration: 0.45, pointerEvents: 'none'}, pos);
+
+  // Scene 1: hook (0.0 to ~3.5 s)
+  tl.addLabel('hook');
+  show('#hook');
+  tl.to('#hook .line', {y: 0, opacity: 1, duration: 0.8})
+    .to('#hook .rule', {scaleX: 1, duration: 0.5}, '-=0.3');
+  hide('#hook', '+=2.4');
+
+  // Scene 2: problem (~3.9 to ~8 s)
+  tl.addLabel('problem');
+  show('#problem');
+  tl.to('#problem .line', {y: 0, opacity: 1, duration: 0.8});
+  hide('#problem', '+=3.0');
+
+  // Scene 3: product (~8.4 to ~15 s)
+  tl.addLabel('turn');
+  show('#turn');
+  tl.to('#turn .frame', {y: 0, scale: 1, opacity: 1, duration: 1.0})
+    .to('#turn .col', {scaleY: 1, duration: 0.55, stagger: 0.07}, '-=0.3')
+    .to('#turn .row', {x: 0, opacity: 1, duration: 0.4, stagger: 0.1}, '-=0.4');
+  hide('#turn', '+=3.2');
+
+  // Scene 4: proof (~15.4 to ~21 s)
+  tl.addLabel('proof');
+  show('#proof');
+  tl.to('#proof .stat', {y: 0, opacity: 1, duration: 0.7, stagger: 0.35});
+  document.querySelectorAll('#proof .big').forEach((el) => {
+    const target = Number(el.dataset.count);
+    const suffix = el.dataset.suffix || '';
+    const counter = {v: 0};
+    tl.to(counter, {
+      v: target,
+      duration: 1.1,
+      ease: 'power2.out',
+      onUpdate: () => { el.textContent = Math.round(counter.v) + suffix; },
+    }, '-=0.8');
+  });
+  hide('#proof', '+=3.4');
+
+  // Scene 5: CTA (~21.5 s to end). End state doubles as the static fallback frame.
+  tl.addLabel('cta');
+  show('#cta');
+  tl.to('#cta .wordmark', {y: 0, duration: 0.9})
+    .to('#cta .rule', {scaleX: 1, duration: 0.5}, '-=0.35')
+    .to('#cta .action', {opacity: 1, duration: 0.6}, '-=0.1')
+    .to('#replay', {opacity: 1, pointerEvents: 'auto', duration: 0.4}, '+=0.6');
+
+  document.getElementById('replay').addEventListener('click', () => {
+    gsap.set('.scene', {opacity: 0, pointerEvents: 'none'});
+    gsap.set('#replay', {opacity: 0, pointerEvents: 'none'});
+    tl.play(0);
+  });
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    tl.progress(1).pause();
+  } else {
+    document.fonts.ready.then(() => tl.play());
+  }
+</script>
+</body>
+<!-- @keep:eof -->
+</html>

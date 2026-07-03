@@ -1,0 +1,124 @@
+<!doctype html>
+<!-- CONTRACT skill=design surface=data-table palette=forest body=16px accent=#2d5a3d -->
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kestrel Freight active shipments</title>
+<style>
+  /* @keep:tokens */
+  :root {
+    --bg: #f4f6f3; --surface: #ffffff; --border: #dde3da;
+    --ink: #1a201b; --muted: #566055; --accent: #2d5a3d; --on-accent: #ffffff;
+    --danger: #b42318; --warning: #b54708; --success: #067647;
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--font-sans); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 28px 20px; }
+  header.page { display: flex; align-items: baseline; gap: 12px; margin-bottom: 6px; }
+  header.page h1 { font-size: 24px; margin: 0; }
+  header.page .asof { font-size: 13px; color: var(--muted); }
+  p.lead { margin: 0 0 20px; font-size: 14px; color: var(--muted); max-width: 72ch; }
+
+  .summary { display: flex; gap: 32px; padding: 14px 18px; background: var(--surface);
+             border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 16px; }
+  .summary .stat .v { font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .summary .stat .v.flag { color: var(--danger); }
+  .summary .stat .k { font-size: 12px; color: var(--muted); }
+
+  .filters { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+  .filters input, .filters select { font: inherit; font-size: 14px; padding: 6px 10px;
+    border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface); color: var(--ink); }
+  .filters input { width: 260px; }
+  .filters .count { margin-left: auto; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  .tblwrap { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius);
+             overflow: auto; max-height: 560px; }
+  table { width: 100%; border-collapse: collapse; min-width: 880px; }
+  th { position: sticky; top: 0; z-index: 1; background: var(--surface); text-align: left;
+       font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+       color: var(--muted); padding: 10px 12px; border-bottom: 1px solid var(--border); }
+  th.num, td.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td { padding: 9px 12px; border-bottom: 1px solid var(--border); font-size: 14px; white-space: nowrap; }
+  tbody tr:hover { background: color-mix(in srgb, var(--accent) 6%, transparent); }
+  tr:last-child td { border-bottom: 0; }
+  .mono { font-family: var(--font-mono); font-size: 13px; }
+  .quiet { color: var(--muted); }
+  .badge { display: inline-block; padding: 1px 8px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+  .badge.ok   { background: color-mix(in srgb, var(--success) 10%, var(--surface)); color: var(--success); }
+  .badge.warn { background: color-mix(in srgb, var(--warning) 12%, var(--surface)); color: var(--warning); }
+  .badge.err  { background: color-mix(in srgb, var(--danger) 9%, var(--surface)); color: var(--danger); }
+  .late { color: var(--danger); font-weight: 600; }
+
+  footer.pager { display: flex; align-items: center; gap: 8px; padding: 12px 4px; font-size: 13px; color: var(--muted); }
+  footer.pager .spacer { flex: 1; }
+  footer.pager button { font: inherit; font-size: 13px; padding: 5px 10px; border-radius: var(--radius);
+    border: 1px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; }
+  footer.pager button[disabled] { color: var(--muted); cursor: default; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="page">
+    <h1>Active shipments</h1>
+    <span class="asof">Updated 6 July 2026, 10:42 ET</span>
+  </header>
+  <p class="lead">Every load currently on the road, refreshed from carrier telematics every five minutes. Late means more than 20 minutes behind the committed window.</p>
+
+  <div class="summary" role="group" aria-label="Today's totals">
+    <div class="stat"><div class="v">148</div><div class="k">Loads en route</div></div>
+    <div class="stat"><div class="v flag">11</div><div class="k">Running late</div></div>
+    <div class="stat"><div class="v">94.1%</div><div class="k">On-time, trailing 7 days</div></div>
+    <div class="stat"><div class="v">$18,240</div><div class="k">At-risk revenue today</div></div>
+  </div>
+
+  <div class="filters">
+    <input type="search" placeholder="Search load, lane, or carrier" aria-label="Search shipments">
+    <select aria-label="Status filter"><option>All statuses</option><option>On time</option><option>Late</option><option>Exception</option></select>
+    <select aria-label="Lane filter"><option>All lanes</option><option>Toronto-Montréal</option><option>Calgary-Vancouver</option></select>
+    <span class="count">148 loads, showing 1-14</span>
+  </div>
+
+  <div class="tblwrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Load</th><th>Lane</th><th>Carrier</th><th>Status</th>
+          <th class="num">ETA</th><th class="num">Variance</th><th class="num">Weight (kg)</th><th class="num">Revenue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="mono">KF-20461</td><td>Toronto-Montréal</td><td>Laurier Haulage</td><td><span class="badge ok">On time</span></td><td class="num">13:05</td><td class="num quiet">+4 min</td><td class="num">17,890</td><td class="num">$2,340</td></tr>
+        <tr><td class="mono">KF-20458</td><td>Calgary-Vancouver</td><td>Pacific Crest Lines</td><td><span class="badge err">Late</span></td><td class="num">15:40</td><td class="num late">+47 min</td><td class="num">21,300</td><td class="num">$3,910</td></tr>
+        <tr><td class="mono">KF-20455</td><td>Winnipeg-Regina</td><td>Redvers Transport</td><td><span class="badge ok">On time</span></td><td class="num">12:20</td><td class="num quiet">-2 min</td><td class="num">9,480</td><td class="num">$1,120</td></tr>
+        <tr><td class="mono">KF-20454</td><td>Toronto-Ottawa</td><td>Laurier Haulage</td><td><span class="badge warn">Exception</span></td><td class="num">14:15</td><td class="num quiet">+18 min</td><td class="num">12,050</td><td class="num">$1,480</td></tr>
+        <tr><td class="mono">KF-20449</td><td>Montréal-Québec</td><td>Beauport Freight</td><td><span class="badge ok">On time</span></td><td class="num">11:55</td><td class="num quiet">0 min</td><td class="num">14,720</td><td class="num">$1,650</td></tr>
+        <tr><td class="mono">KF-20447</td><td>Halifax-Moncton</td><td>Fundy Carriers</td><td><span class="badge ok">On time</span></td><td class="num">12:35</td><td class="num quiet">+6 min</td><td class="num">8,310</td><td class="num">$980</td></tr>
+        <tr><td class="mono">KF-20444</td><td>Edmonton-Calgary</td><td>Foothills Express</td><td><span class="badge err">Late</span></td><td class="num">13:50</td><td class="num late">+62 min</td><td class="num">19,940</td><td class="num">$2,205</td></tr>
+        <tr><td class="mono">KF-20441</td><td>Toronto-Montréal</td><td>Beauport Freight</td><td><span class="badge ok">On time</span></td><td class="num">16:10</td><td class="num quiet">-8 min</td><td class="num">16,400</td><td class="num">$2,290</td></tr>
+        <tr><td class="mono">KF-20439</td><td>Vancouver-Kelowna</td><td>Pacific Crest Lines</td><td><span class="badge ok">On time</span></td><td class="num">14:45</td><td class="num quiet">+1 min</td><td class="num">11,080</td><td class="num">$1,730</td></tr>
+        <tr><td class="mono">KF-20436</td><td>Saskatoon-Winnipeg</td><td>Redvers Transport</td><td><span class="badge warn">Exception</span></td><td class="num">17:25</td><td class="num quiet">+22 min</td><td class="num">20,150</td><td class="num">$2,860</td></tr>
+        <tr><td class="mono">KF-20433</td><td>Ottawa-Kingston</td><td>Laurier Haulage</td><td><span class="badge ok">On time</span></td><td class="num">12:05</td><td class="num quiet">+3 min</td><td class="num">7,240</td><td class="num">$840</td></tr>
+        <tr><td class="mono">KF-20430</td><td>Montréal-Toronto</td><td>Beauport Freight</td><td><span class="badge ok">On time</span></td><td class="num">18:00</td><td class="num quiet">-5 min</td><td class="num">18,660</td><td class="num">$2,410</td></tr>
+        <tr><td class="mono">KF-20428</td><td>Calgary-Edmonton</td><td>Foothills Express</td><td><span class="badge ok">On time</span></td><td class="num">13:30</td><td class="num quiet">+9 min</td><td class="num">13,890</td><td class="num">$1,560</td></tr>
+        <tr><td class="mono">KF-20425</td><td>Toronto-London</td><td>Thames Valley Cartage</td><td><span class="badge err">Late</span></td><td class="num">12:50</td><td class="num late">+38 min</td><td class="num">10,470</td><td class="num">$1,190</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer class="pager">
+    <span>Rows 1-14 of 148</span>
+    <span class="spacer"></span>
+    <button disabled>Previous</button>
+    <button>Next</button>
+  </footer>
+</div>
+</body>
+<!-- @keep:eof -->
+</html>

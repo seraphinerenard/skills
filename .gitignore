@@ -1,0 +1,29 @@
+.DS_Store
+
+# Local secrets and machine-specific files
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+*credentials*.json
+*secret*.json
+*token*.json
+*password*.json
+
+# Agent-generated notes outside skill source
+CLAUDE.md
+AGENTS.md
+PLAN.md
+TODO.md
+TODOS.md
+.claude/
+.codex/
+
+.venv/
+__pycache__/
+node_modules/

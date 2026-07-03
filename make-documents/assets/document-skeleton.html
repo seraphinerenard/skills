@@ -1,0 +1,91 @@
+<!doctype html>
+<!-- CONTRACT skill=design surface=document palette=cold-luxury body=16px accent=#2f4156 -->
+<!-- CONTRACT skill=make-documents format=html-print type=memo -->
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kestrel Freight memo, Laurier Haulage renewal</title>
+<style>
+  /* @keep:tokens */
+  :root {
+    --bg: #f7f8f9; --surface: #ffffff; --border: #e2e5e9;
+    --ink: #16181d; --muted: #5b616e; --accent: #2f4156; --on-accent: #ffffff;
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-serif: Georgia, "Times New Roman", serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--font-sans); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  /* @keep:reduced-motion */
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 64px; background: var(--surface);
+          border: 1px solid var(--border); border-radius: var(--radius); margin-top: 24px; margin-bottom: 24px; }
+  h1 { font-size: 26px; line-height: 1.2; margin: 0 0 10px; letter-spacing: -0.01em; }
+  h2 { font-size: 19px; line-height: 1.25; margin: 28px 0 8px; }
+  p { margin: 0 0 12px; max-width: 68ch; }
+  .meta { font-size: 13px; color: var(--muted); border-bottom: 1px solid var(--border);
+          padding-bottom: 14px; margin-bottom: 18px; }
+  .meta span { margin-right: 16px; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0 4px; }
+  th { text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase;
+       letter-spacing: .04em; color: var(--muted); padding: 8px 10px;
+       border-bottom: 1px solid var(--border); }
+  td { padding: 8px 10px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  tr:last-child td { border-bottom: 0; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .src { font-size: 12px; color: var(--muted); margin: 4px 0 0; }
+  footer { max-width: 720px; margin: 0 auto 40px; padding: 0 24px; font-size: 12px; color: var(--muted); }
+
+  @media print {
+    @page { size: A4; margin: 2cm; @bottom-right { content: counter(page); } }
+    body { background: var(--surface); font: 12pt/1.5 var(--font-serif); }
+    .page { border: 0; border-radius: 0; max-width: none; margin: 0; padding: 0; }
+    h1 { font-size: 20pt; page-break-after: avoid; }
+    h2 { font-size: 14pt; page-break-after: avoid; }
+    p, li, td { orphans: 2; widows: 2; }
+    table { page-break-inside: avoid; }
+    footer { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+  <h1>Renew the Laurier Haulage contract at the two-year term</h1>
+  <div class="meta">
+    <span>To: J. Marchand, VP Operations</span>
+    <span>From: M. Okafor, Carrier management</span>
+    <span>Date: 6 July 2026</span>
+    <span>Decision needed by: 15 July 2026</span>
+  </div>
+
+  <p>Laurier Haulage carried 41% of our Ontario loads over the last twelve months at a 94.6% on-time rate, and its two-year renewal offer prices those lanes 3.1% below the rolling monthly rate we pay today. We recommend signing the two-year term before the offer lapses on 18 July 2026; the decision needs your signature by 15 July to keep the quoted rates. The evidence for both numbers is below, from the carrier scorecard and the June quote.</p>
+
+  <h2>Laurier's on-time rate held above 94% through the winter peak</h2>
+  <p>Across 2,340 loads from July 2025 to June 2026, Laurier delivered 94.6% on time against a carrier-pool median of 91.2%. Winter is the test that matters on Ontario lanes: January was Laurier's worst month at 92.8%, still ahead of the pool's January median of 87.4%.</p>
+  <table>
+    <thead>
+      <tr><th>Carrier</th><th class="num">Loads</th><th class="num">On-time</th><th class="num">Claims per 1,000 loads</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Laurier Haulage</td><td class="num">2,340</td><td class="num">94.6%</td><td class="num">1.7</td></tr>
+      <tr><td>Beauport Freight</td><td class="num">1,890</td><td class="num">93.1%</td><td class="num">2.4</td></tr>
+      <tr><td>Pool median (11 carriers)</td><td class="num">980</td><td class="num">91.2%</td><td class="num">3.0</td></tr>
+    </tbody>
+  </table>
+  <p class="src">Source: Kestrel carrier scorecard, July 2025 to June 2026, pulled 4 July 2026.</p>
+
+  <h2>The two-year term costs 3.1% less per load than rolling monthly</h2>
+  <p>The June quote holds the 2026 rate card flat for 24 months in exchange for a 65% volume commitment on the four Ontario lanes. At current volumes that is $214,000 less spend over the term (June 2026 quote against the trailing twelve months of AP invoices). Laurier already carries 71% of those lanes, so the committed floor costs us nothing unless we deliberately shift volume away.</p>
+  <p>If the renewal lapses, the fallback is month-to-month at the 2025 rate card plus the announced 4% increase. I will book the signature meeting for the week of 13 July; no reply is needed unless you want the fallback modelled in more detail first.</p>
+</div>
+
+<footer>Kestrel Freight is a fictional company. This file is the make-documents skeleton: replace the memo content, keep the tokens, the print rules, and the sentinels.</footer>
+
+</body>
+<!-- @keep:eof -->
+</html>

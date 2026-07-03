@@ -1,0 +1,5 @@
+backend/.venv/
+backend/northline.db
+frontend/node_modules/
+frontend/dist/
+backend/__pycache__/

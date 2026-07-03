@@ -1,0 +1,219 @@
+<!doctype html>
+<!-- CONTRACT skill=design surface=product-ui palette=mono-pop body=16px accent=#1f4ed8 -->
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fernline settings</title>
+<style>
+  /* @keep:tokens */
+  :root {
+    --bg: #fafafa; --surface: #ffffff; --border: #e4e4e7;
+    --ink: #18181b; --muted: #52525b; --accent: #1f4ed8; --on-accent: #ffffff;
+    --danger: #b42318; --success: #067647;
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--font-sans); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+
+  .nav { display: flex; align-items: center; gap: 24px; height: 56px; padding: 0 20px;
+         background: var(--surface); border-bottom: 1px solid var(--border); }
+  .nav .brand { font-weight: 700; }
+  .nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+  .nav a[aria-current="page"] { color: var(--ink); font-weight: 600; border-bottom: 2px solid var(--accent); padding-bottom: 2px; }
+  .nav .spacer { flex: 1; }
+  .nav .user { font-size: 14px; color: var(--muted); }
+
+  .shell { display: grid; grid-template-columns: 220px 1fr; gap: 32px; max-width: 1040px; margin: 0 auto; padding: 32px 20px; }
+  .side { position: sticky; top: 32px; align-self: start; display: grid; gap: 2px; }
+  .side a { padding: 8px 12px; border-radius: var(--radius); color: var(--muted); text-decoration: none; font-size: 14px; }
+  .side a[aria-current="true"] { background: color-mix(in srgb, var(--accent) 9%, transparent); color: var(--accent); font-weight: 600; }
+  .side a:hover { color: var(--ink); }
+
+  main { display: grid; gap: 24px; }
+  h1 { font-size: 28px; margin: 0; }
+  .section { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); }
+  .section > header { padding: 16px 20px; border-bottom: 1px solid var(--border); }
+  .section > header h2 { margin: 0; font-size: 16px; }
+  .section > header p { margin: 2px 0 0; font-size: 13px; color: var(--muted); }
+  .section .body { padding: 20px; }
+  .section footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+
+  .field { display: grid; gap: 4px; max-width: 380px; margin-bottom: 16px; }
+  .field:last-child { margin-bottom: 0; }
+  .field label { font-size: 14px; font-weight: 600; }
+  .field input, .field select { font: inherit; padding: 8px 10px; border: 1px solid var(--border);
+    border-radius: var(--radius); background: var(--surface); color: var(--ink); width: 100%; }
+  .field .help { font-size: 13px; color: var(--muted); }
+  .field.invalid input { border-color: var(--danger); }
+  .field.invalid .help { color: var(--danger); }
+
+  .btn { font: inherit; font-size: 14px; font-weight: 600; padding: 8px 14px; border-radius: var(--radius);
+         border: 1px solid transparent; background: var(--accent); color: var(--on-accent); cursor: pointer; }
+  .btn.secondary { background: var(--surface); color: var(--ink); border-color: var(--border); }
+  .btn.destructive { background: var(--danger); }
+
+  .row { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--border); }
+  .row:first-child { padding-top: 0; }
+  .row:last-child { border-bottom: 0; padding-bottom: 0; }
+  .row .label { font-size: 14px; font-weight: 600; }
+  .row .desc { font-size: 13px; color: var(--muted); margin-top: 2px; max-width: 46ch; }
+
+  .switch { position: relative; width: 40px; height: 22px; flex: none; }
+  .switch input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+  .switch .track { position: absolute; inset: 0; background: var(--border); border-radius: 999px; transition: background 150ms ease-out; }
+  .switch .track::after { content: ""; position: absolute; top: 2px; left: 2px; width: 18px; height: 18px;
+    background: var(--surface); border-radius: 50%; transition: transform 150ms ease-out; }
+  .switch input:checked + .track { background: var(--accent); }
+  .switch input:checked + .track::after { transform: translateX(18px); }
+  .switch input:focus-visible + .track { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em;
+       color: var(--muted); padding: 8px 12px; border-bottom: 1px solid var(--border); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 14px; }
+  tr:last-child td { border-bottom: 0; }
+  .mono { font-family: var(--font-mono); font-size: 13px; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .quiet { color: var(--muted); }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <span class="brand">Fernline</span>
+  <a href="#">Shipments</a>
+  <a href="#">Carriers</a>
+  <a href="#" aria-current="page">Settings</a>
+  <span class="spacer"></span>
+  <span class="user">M. Okafor, Dispatch lead</span>
+</nav>
+
+<div class="shell">
+  <aside class="side" aria-label="Settings sections">
+    <a href="#profile" aria-current="true">Profile</a>
+    <a href="#notifications">Notifications</a>
+    <a href="#api">API keys</a>
+    <a href="#danger">Close account</a>
+  </aside>
+
+  <main>
+    <h1>Settings</h1>
+
+    <section class="section" id="profile" aria-labelledby="profile-h">
+      <header>
+        <h2 id="profile-h">Profile</h2>
+        <p>How your name and contact details appear to carriers and teammates.</p>
+      </header>
+      <div class="body">
+        <div class="field">
+          <label for="name">Full name</label>
+          <input id="name" value="Mercy Okafor">
+        </div>
+        <div class="field invalid">
+          <label for="email">Work email</label>
+          <input id="email" type="email" value="m.okafor@fernline" aria-describedby="email-err" aria-invalid="true">
+          <div class="help" id="email-err">That address is missing its domain. Use the full form, like m.okafor@fernline.ca.</div>
+        </div>
+        <div class="field">
+          <label for="tz">Time zone</label>
+          <select id="tz">
+            <option>America/Toronto (ET)</option>
+            <option>America/Winnipeg (CT)</option>
+            <option>America/Vancouver (PT)</option>
+          </select>
+          <div class="help">Departure boards and reports use this zone.</div>
+        </div>
+      </div>
+      <footer>
+        <button class="btn secondary">Discard</button>
+        <button class="btn">Save changes</button>
+      </footer>
+    </section>
+
+    <section class="section" id="notifications" aria-labelledby="notif-h">
+      <header>
+        <h2 id="notif-h">Notifications</h2>
+        <p>Alerts are sent to your work email during your on-shift hours only.</p>
+      </header>
+      <div class="body">
+        <div class="row">
+          <div>
+            <div class="label">Late departure alerts</div>
+            <div class="desc">One message when a shipment departs more than 20 minutes behind schedule.</div>
+          </div>
+          <span class="switch"><input type="checkbox" checked aria-label="Late departure alerts"><span class="track"></span></span>
+        </div>
+        <div class="row">
+          <div>
+            <div class="label">Carrier document expiries</div>
+            <div class="desc">A weekly summary of insurance and licence documents expiring within 30 days.</div>
+          </div>
+          <span class="switch"><input type="checkbox" checked aria-label="Carrier document expiries"><span class="track"></span></span>
+        </div>
+        <div class="row">
+          <div>
+            <div class="label">Daily digest</div>
+            <div class="desc">Yesterday's volumes and exceptions, delivered at 06:30.</div>
+          </div>
+          <span class="switch"><input type="checkbox" aria-label="Daily digest"><span class="track"></span></span>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="api" aria-labelledby="api-h">
+      <header>
+        <h2 id="api-h">API keys</h2>
+        <p>Keys grant full read access to your organization's shipment data. Rotate any key older than 90 days.</p>
+      </header>
+      <div class="body" style="padding: 0 20px;">
+        <table>
+          <thead>
+            <tr><th>Name</th><th>Key</th><th class="num">Last used</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Warehouse sync</td>
+              <td class="mono">fl_live_9c41...e2ba</td>
+              <td class="num">Today, 09:12</td>
+              <td class="num"><button class="btn secondary">Rotate</button></td>
+            </tr>
+            <tr>
+              <td>Reporting export</td>
+              <td class="mono">fl_live_77d0...41cc</td>
+              <td class="num quiet">14 March 2026</td>
+              <td class="num"><button class="btn secondary">Rotate</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <footer>
+        <button class="btn">Create key</button>
+      </footer>
+    </section>
+
+    <section class="section" id="danger" aria-labelledby="danger-h">
+      <header>
+        <h2 id="danger-h">Close account</h2>
+        <p>Closing removes your access immediately. Shipment history stays with your organization.</p>
+      </header>
+      <div class="body">
+        <div class="row">
+          <div>
+            <div class="label">Close my account</div>
+            <div class="desc">An administrator can reopen it within 30 days; after that the profile is deleted.</div>
+          </div>
+          <button class="btn destructive">Close account</button>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+</body>
+<!-- @keep:eof -->
+</html>

@@ -1,0 +1,187 @@
+<!doctype html>
+<!-- CONTRACT skill=design surface=marketing palette=black-tan body=18px accent=#c8a26a -->
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ledgerline closes the books in three days</title>
+<style>
+  /* @keep:tokens */
+  :root {
+    --bg: #141311; --surface: #1d1b18; --border: #2e2b26;
+    --ink: #ece7de; --muted: #a39c8f; --accent: #c8a26a; --on-accent: #16140f;
+    --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+    --radius: 6px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 18px/1.6 var(--font-sans); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  .nav { display: flex; align-items: center; gap: 28px; height: 64px; }
+  .nav .brand { font-weight: 700; font-size: 17px; letter-spacing: .01em; }
+  .nav a { color: var(--muted); text-decoration: none; font-size: 14px; }
+  .nav a:hover { color: var(--ink); }
+  .nav .spacer { flex: 1; }
+  .btn { display: inline-block; font: inherit; font-size: 14px; font-weight: 600; padding: 9px 18px;
+         border-radius: var(--radius); border: 1px solid transparent; background: var(--accent);
+         color: var(--on-accent); text-decoration: none; cursor: pointer; }
+  .btn.ghost { background: transparent; color: var(--ink); border-color: var(--border); }
+
+  .hero { display: grid; grid-template-columns: 7fr 5fr; gap: 48px; align-items: center; padding: 72px 0 64px; }
+  .hero h1 { font-size: 52px; line-height: 1.08; margin: 0 0 20px; letter-spacing: -0.015em; max-width: 14ch; }
+  .hero p { font-size: 18px; color: var(--muted); margin: 0 0 28px; max-width: 44ch; }
+  .hero .actions { display: flex; gap: 12px; align-items: center; }
+  .hero .actions .note { font-size: 13px; color: var(--muted); }
+
+  .proof { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
+  .proof h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin: 0 0 12px; font-weight: 600; }
+  .proof table { width: 100%; border-collapse: collapse; }
+  .proof td { padding: 9px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+  .proof tr:last-child td { border-bottom: 0; }
+  .proof td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+  .proof .src { font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+
+  .logos { border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); padding: 20px 0; }
+  .logos .row { display: flex; gap: 40px; justify-content: space-between; flex-wrap: wrap; align-items: baseline; }
+  .logos .mark { font-size: 15px; font-weight: 700; color: var(--muted); letter-spacing: .02em; }
+  .logos .cap { font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+
+  .split { display: grid; grid-template-columns: 5fr 7fr; gap: 56px; padding: 72px 0; align-items: start; }
+  .split h2 { font-size: 30px; line-height: 1.15; margin: 0 0 14px; letter-spacing: -0.01em; }
+  .split p { color: var(--muted); margin: 0 0 14px; max-width: 52ch; }
+  .steps { display: grid; gap: 0; border-top: 1px solid var(--border); }
+  .step { display: grid; grid-template-columns: 56px 1fr; gap: 16px; padding: 18px 0; border-bottom: 1px solid var(--border); }
+  .step .n { font-family: var(--font-mono); font-size: 14px; color: var(--accent); padding-top: 2px; }
+  .step h3 { margin: 0 0 4px; font-size: 16px; }
+  .step p { margin: 0; font-size: 14px; max-width: 58ch; }
+
+  .bignum { padding: 64px 0; border-top: 1px solid var(--border); text-align: left; }
+  .bignum .v { font-size: 96px; font-weight: 700; letter-spacing: -0.03em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .bignum .v span { color: var(--accent); }
+  .bignum p { color: var(--muted); font-size: 16px; max-width: 60ch; margin: 14px 0 0; }
+
+  .pricing { display: grid; grid-template-columns: 5fr 7fr; gap: 24px; padding: 64px 0; border-top: 1px solid var(--border); align-items: stretch; }
+  .plan { border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; background: var(--surface); }
+  .plan.lead { border-color: var(--accent); }
+  .plan h3 { margin: 0 0 6px; font-size: 18px; }
+  .plan .price { font-size: 34px; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .plan .per { font-size: 13px; color: var(--muted); }
+  .plan ul { margin: 16px 0 20px; padding: 0 0 0 18px; color: var(--muted); font-size: 14px; }
+  .plan li { margin-bottom: 6px; }
+
+  footer.site { border-top: 1px solid var(--border); padding: 28px 0 40px; display: flex; gap: 24px; align-items: baseline; }
+  footer.site .brand { font-weight: 700; }
+  footer.site a { color: var(--muted); text-decoration: none; font-size: 13px; }
+  footer.site .spacer { flex: 1; }
+  footer.site .fine { font-size: 12px; color: var(--muted); }
+
+  @media (max-width: 800px) {
+    .hero, .split, .pricing { grid-template-columns: 1fr; gap: 28px; }
+    .hero h1 { font-size: 38px; }
+    .bignum .v { font-size: 64px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <nav class="nav" aria-label="Site">
+    <span class="brand">Ledgerline</span>
+    <a href="#how">How it works</a>
+    <a href="#pricing">Pricing</a>
+    <a href="#">Docs</a>
+    <span class="spacer"></span>
+    <a class="btn ghost" href="#">Sign in</a>
+    <a class="btn" href="#pricing">Start a pilot</a>
+  </nav>
+
+  <section class="hero">
+    <div>
+      <h1>Close the books in three days, with evidence attached</h1>
+      <p>Ledgerline pulls every reconciliation, accrual, and approval into one checklist, so month-end stops living in seventeen spreadsheets and two inboxes.</p>
+      <div class="actions">
+        <a class="btn" href="#pricing">Start a pilot</a>
+        <span class="note">Pilots run on your last closed month. No card required.</span>
+      </div>
+    </div>
+    <aside class="proof" aria-label="Median close results">
+      <h2>Median close, before and after</h2>
+      <table>
+        <tr><td>Days to close</td><td class="num">9.5 to 3.1</td></tr>
+        <tr><td>Late accrual corrections</td><td class="num">14 to 2 per month</td></tr>
+        <tr><td>Audit requests answered same day</td><td class="num">31% to 88%</td></tr>
+      </table>
+      <p class="src">Medians across 42 customers after two full closes, measured January to May 2026.</p>
+    </aside>
+  </section>
+
+  <section class="logos" aria-label="Customers">
+    <p class="cap">Finance teams closing on Ledgerline</p>
+    <div class="row">
+      <span class="mark">Kestrel Freight</span>
+      <span class="mark">Fernline</span>
+      <span class="mark">Marrow Foods</span>
+      <span class="mark">Halyard Insurance</span>
+      <span class="mark">Copperleaf Energy</span>
+    </div>
+  </section>
+
+  <section class="split" id="how">
+    <div>
+      <h2>The close becomes one list that runs itself</h2>
+      <p>Every task knows its owner, its evidence, and what it blocks downstream. Controllers watch one screen where every task reports its own state.</p>
+      <p>Ledgerline connects to your general ledger and your bank feeds on day one; the first close maps the checklist you already run, line for line.</p>
+    </div>
+    <div class="steps">
+      <div class="step"><span class="n">01</span><div><h3>Connect the ledger</h3><p>Read-only connections to NetSuite, Sage Intacct, and QuickBooks pull balances every hour. Nothing writes back without an approval.</p></div></div>
+      <div class="step"><span class="n">02</span><div><h3>Map the checklist</h3><p>Your current close tasks import from a spreadsheet in one pass; each line gets an owner, a due day, and the account it certifies.</p></div></div>
+      <div class="step"><span class="n">03</span><div><h3>Reconcile with evidence</h3><p>Bank matches, subledger ties, and flux explanations attach to the task that requires them, where the auditor will look for them later.</p></div></div>
+      <div class="step"><span class="n">04</span><div><h3>Certify and archive</h3><p>The controller signs each account once its tasks are complete, and the whole month exports as a single audit binder.</p></div></div>
+    </div>
+  </section>
+
+  <section class="bignum">
+    <div class="v">6.4 <span>days back</span></div>
+    <p>The median team recovers 6.4 working days per month, measured as the gap between the old close date and the new one across the last three closes. Marrow Foods used the time to move budgeting in-house; Halyard cut its audit fieldwork by a week.</p>
+  </section>
+
+  <section class="pricing" id="pricing">
+    <div class="plan">
+      <h3>Team</h3>
+      <div class="price">$680<span class="per"> per month</span></div>
+      <ul>
+        <li>One entity, up to 8 preparers</li>
+        <li>Ledger and bank connections included</li>
+        <li>Audit binder export</li>
+      </ul>
+      <a class="btn ghost" href="#">Start a pilot</a>
+    </div>
+    <div class="plan lead">
+      <h3>Multi-entity</h3>
+      <div class="price">$2,100<span class="per"> per month</span></div>
+      <ul>
+        <li>Up to 12 entities with intercompany eliminations</li>
+        <li>Consolidated close calendar and certification</li>
+        <li>SSO, audit log, and controlled write-back</li>
+        <li>A named accountant on support, response under 4 hours</li>
+      </ul>
+      <a class="btn" href="#">Talk to us about a pilot</a>
+    </div>
+  </section>
+
+  <footer class="site">
+    <span class="brand">Ledgerline</span>
+    <a href="#">Security</a>
+    <a href="#">Docs</a>
+    <a href="#">Careers</a>
+    <span class="spacer"></span>
+    <span class="fine">Ledgerline Software, Toronto. A fictional company for demonstration.</span>
+  </footer>
+
+</div>
+</body>
+<!-- @keep:eof -->
+</html>
